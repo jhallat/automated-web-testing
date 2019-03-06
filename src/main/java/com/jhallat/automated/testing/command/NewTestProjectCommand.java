@@ -7,6 +7,6 @@ public class NewTestProjectCommand implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent actionEvent) {
-        
+
     }
 }
