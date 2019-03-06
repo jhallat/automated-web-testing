@@ -7,8 +7,24 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
+@SpringBootApplication
 public class AutomatedTestingUI extends Application {
+
+    private ConfigurableApplicationContext springContext;
+
+    @Override
+    public void init() throws Exception {
+        springContext = SpringApplication.run(AutomatedTestingUI.class);
+    }
+
+    @Override
+    public void stop() {
+        springContext.stop();
+    }
 
     public static void main(String...args) {
         launch(args);
@@ -36,7 +52,7 @@ public class AutomatedTestingUI extends Application {
         Menu fileMenu = new Menu("File");
         MenuItem newProjectMenuItem = new MenuItem("New Test Project");
         fileMenu.getItems().addAll(newProjectMenuItem);
-        
+
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu);
 
