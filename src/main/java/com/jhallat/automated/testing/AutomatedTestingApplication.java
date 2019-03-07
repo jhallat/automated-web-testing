@@ -1,5 +1,6 @@
-package com.jhallat.automated.testing.ui;
+package com.jhallat.automated.testing;
 
+import com.jhallat.automated.testing.command.NewTestProjectCommand;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -7,18 +8,23 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
-public class AutomatedTestingUI extends Application {
+public class AutomatedTestingApplication extends Application {
 
     private ConfigurableApplicationContext springContext;
 
+    @Autowired
+    private NewTestProjectCommand newTestProjectCommand;
+
     @Override
     public void init() throws Exception {
-        springContext = SpringApplication.run(AutomatedTestingUI.class);
+        springContext = SpringApplication.run(AutomatedTestingApplication.class);
+        newTestProjectCommand = springContext.getBean(NewTestProjectCommand.class);
     }
 
     @Override
@@ -50,8 +56,16 @@ public class AutomatedTestingUI extends Application {
 
     private MenuBar createMenuBar() {
         Menu fileMenu = new Menu("File");
-        MenuItem newProjectMenuItem = new MenuItem("New Test Project");
-        fileMenu.getItems().addAll(newProjectMenuItem);
+        MenuItem newTestProjectMenuItem = new MenuItem("New Test Project");
+        //newTestProjectMenuItem.setOnAction(newTestProjectCommand);
+        newTestProjectMenuItem.setOnAction(action -> {
+            if (newTestProjectCommand == null) {
+                System.out.println("command is null");
+            } else {
+                newTestProjectCommand.handle(action);
+            }
+        });
+        fileMenu.getItems().addAll(newTestProjectMenuItem);
 
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu);
