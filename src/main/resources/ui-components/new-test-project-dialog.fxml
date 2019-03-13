@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.jhallat.automated.testing.controller.NewTestProjectDialogController">
+    <stylesheets>
+        <URL value="@application-style.css"/>
+    </stylesheets>
+    <center>
+        <GridPane hgap="6.0" vgap="6.0">
+            <padding>
+                <Insets topRightBottomLeft="10.0" />
+            </padding>
+            <Label text="Project Name" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="txtProjectName" />
+            <Label text="Project Folder" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Home URL" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="" fx:id="lblMessage" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints hgrow="ALWAYS"/>
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+    </center>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER" spacing="10">
+          <padding>
+              <Insets topRightBottomLeft="10.0"/>
+          </padding>
+         <children>
+            <Button mnemonicParsing="false" text="Create" styleClass="dialog-button" onAction="#create"/>
+            <Button mnemonicParsing="false" text="Cancel" styleClass="dialog-button" onAction="#cancel"/>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

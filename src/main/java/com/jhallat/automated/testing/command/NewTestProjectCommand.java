@@ -1,32 +1,56 @@
 package com.jhallat.automated.testing.command;
 
+import com.jhallat.automated.testing.controller.NewTestProjectDialogController;
+import com.jhallat.automated.testing.domain.TestProject;
+import com.jhallat.automated.testing.listener.NewTestProjectListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
-public class NewTestProjectCommand implements EventHandler<ActionEvent> {
+public class NewTestProjectCommand implements EventHandler<ActionEvent>, NewTestProjectListener {
+
+    private Stage stage;
 
     @Override
     public void handle(ActionEvent actionEvent) {
 
-        Stage stage = new Stage();
-        BorderPane formPane = new BorderPane();
+        stage = new Stage();
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/ui-components/new-test-project-dialog.fxml"));
+            Pane formPane = loader.load();
+            loader.<NewTestProjectDialogController>getController().addListener(this);
+            stage.setTitle("Add New Test Project");
+            stage.setAlwaysOnTop(true);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(formPane, 350, 200));
+            stage.show();
+        } catch (IOException exception) {
+            //TODO Replace with logger
+            exception.printStackTrace();
+        }
 
-        Label projectFolderLabel = new Label("Project Folder");
-        TextField projectFolderTextField = new TextField();
-        GridPane inputFrame = new GridPane();
-        inputFrame.add(projectFolderLabel, 0, 0);
-        inputFrame.add(projectFolderTextField, 1, 0);
-        formPane.setCenter(inputFrame);
 
-        stage.setScene(new Scene(formPane, 300, 100));
-        stage.show();
+    }
+
+    @Override
+    public void onCancel() {
+       if (stage != null) {
+           stage.close();
+       }
+    }
+
+    @Override
+    public void onCreate(TestProject testProject) {
+
     }
 }

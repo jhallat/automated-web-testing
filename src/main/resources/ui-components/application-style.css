@@ -1,0 +1,4 @@
+.dialog-button {
+    -fx-min-width: 100px;
+    -fx-padding: 6 6 6 6;
+}
