@@ -1,17 +1,25 @@
 package com.jhallat.automated.testing;
 
 import com.jhallat.automated.testing.command.NewTestProjectCommand;
+import com.jhallat.automated.testing.controller.ProjectExplorerController;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import java.awt.*;
+import java.io.IOException;
 
 @SpringBootApplication
 public class AutomatedTestingApplication extends Application {
@@ -21,10 +29,14 @@ public class AutomatedTestingApplication extends Application {
     @Autowired
     private NewTestProjectCommand newTestProjectCommand;
 
+    @Autowired
+    private ProjectExplorerController projectExplorerController;
+
     @Override
     public void init() throws Exception {
         springContext = SpringApplication.run(AutomatedTestingApplication.class);
         newTestProjectCommand = springContext.getBean(NewTestProjectCommand.class);
+        projectExplorerController = springContext.getBean(ProjectExplorerController.class);
     }
 
     @Override
@@ -47,9 +59,12 @@ public class AutomatedTestingApplication extends Application {
     private Scene createScene() {
 
         BorderPane mainForm = new BorderPane();
-        MenuBar menuBar = createMenuBar();
 
+        MenuBar menuBar = createMenuBar();
         mainForm.setTop(menuBar);
+
+        SplitPane projectPane = new SplitPane(createProjectExplorerPane(), new BorderPane());
+        mainForm.setCenter(projectPane);
 
         return new Scene(mainForm, 1200, 800);
     }
@@ -71,5 +86,19 @@ public class AutomatedTestingApplication extends Application {
         menuBar.getMenus().addAll(fileMenu);
 
         return menuBar;
+    }
+
+    private Pane createProjectExplorerPane() {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/ui-components/project-explorer.fxml"));
+        loader.setController(projectExplorerController);
+        try {
+            Pane formPane = loader.load();
+            return formPane;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new HBox();
     }
 }
